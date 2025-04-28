@@ -42,7 +42,39 @@ const gameController =(function(){
          ${board[6] || 6} | ${board[7] || 7} | ${board[8] || 8}
         `);
     };
+    const ifWinner = (marker) => {
+        let correct = [
+            [0,1,2],
+            [0,4,8],
+            [0,3,6],
+            [1,4,7],
+            [2,5,8],
+            [3,4,5],
+            [6,7,8],
+            [2,4,6]
+        ];
     
+        for (let i of correct) {
+            const board = gameBoard.getBoard();
+            if (
+                board[i[0]] === board[i[1]] &&
+                board[i[1]] === board[i[2]] &&
+                board[i[0]] !== ""
+            ) {
+                return true;
+            }
+        }
+    
+        return false; // Only if no winning line is found
+    };
+    
+    const isTie=()=>{
+        let board = gameBoard.getBoard();
+        for(let i of board){
+            if(i!=="")return false;
+        }
+        return true;
+    }
     const handleMove=(position)=>{
         //marker is given by if teh xisplay is true or not
         const currentPlayer = xisplay?p1:p2;
@@ -55,42 +87,18 @@ const gameController =(function(){
 
         if(ifWinner(currentPlayer.marker)){
             console.log(`winner is the ${currentPlayer.name}`);
+            gameBoard.resetBoard();
+            
             return;
         }
         if (isTie()) {
             console.log("It's a tie!");
             return;
         }
-        xIsNext = !xIsNext;
+        xisplay = !xisplay;
 
-        const ifWinner=(marker)=>{
-            let correct = [
-                [0,1,2],
-                [0,4,8],
-                [0,3,6],
-                [1,4,7],
-                [2,5,8],
-                [3,4,5],
-                [6,7,8],
-                [2,4,6]
-            ];
-            for(let i of correct){
-                if(gameBoard.getBoard()[i[0]]==gameBoard.getBoard()[i[1]]==gameBoard.getBoard()[i[2]]){
-                    if(!gameBoard.getBoard()[i[0]]==""&&!gameBoard.getBoard()[i[1]]==""&&!gameBoard.getBoard()[i[2]]==""){
-                        return true;
-                    }
-                    else return false;
-                }
-                else return false;
-            }
-        }
-        const isTie=()=>{
-            let board = gameBoard.getBoard();
-            for(let i of board){
-                if(i!="")return false;
-            }
-            return true;
-        }
+        s
     }
+
     return {start, handleMove};
 })();
